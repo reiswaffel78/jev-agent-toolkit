@@ -1,0 +1,13 @@
+{
+  "_comment": "CURRENT (local build). Cursor .cursor/mcp.json. Replace /absolute/path/to/jev-agent-toolkit with where you cloned this repo and ran `npm install && npm run build` in mcp/jev. NOTE the ${env:VAR} syntax, which differs from Claude Code's ${VAR}. Remove this _comment key before use.",
+  "mcpServers": {
+    "jev": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/absolute/path/to/jev-agent-toolkit/mcp/jev/dist/index.js"],
+      "env": {
+        "TYPESAFE_API_KEY": "${env:TYPESAFE_API_KEY}"
+      }
+    }
+  }
+}

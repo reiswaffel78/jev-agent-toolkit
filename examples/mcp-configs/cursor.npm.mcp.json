@@ -1,0 +1,13 @@
+{
+  "_comment": "FUTURE, NOT USABLE YET: jev-agent-toolkit-mcp is not published to npm, so this config fails until it is. Use cursor.local.mcp.json today. Once published: Cursor .cursor/mcp.json; NOTE the ${env:VAR} syntax, which differs from Claude Code's ${VAR}. Remove this _comment key before use.",
+  "mcpServers": {
+    "jev": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "jev-agent-toolkit-mcp"],
+      "env": {
+        "TYPESAFE_API_KEY": "${env:TYPESAFE_API_KEY}"
+      }
+    }
+  }
+}

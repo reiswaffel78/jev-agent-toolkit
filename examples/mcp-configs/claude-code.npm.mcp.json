@@ -1,0 +1,13 @@
+{
+  "_comment": "FUTURE, NOT USABLE YET: jev-agent-toolkit-mcp is not published to npm, so this config fails until it is. Use claude-code.local.mcp.json today. Once published: Claude Code project-scoped .mcp.json; Claude Code expands ${VAR}, so the key stays in your environment. Remove this _comment key before use.",
+  "mcpServers": {
+    "jev": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "jev-agent-toolkit-mcp"],
+      "env": {
+        "TYPESAFE_API_KEY": "${TYPESAFE_API_KEY}"
+      }
+    }
+  }
+}

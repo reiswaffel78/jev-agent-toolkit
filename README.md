@@ -6,8 +6,24 @@ judgment layer — plus an optional MCP bridge and capability-driven workflows f
 code, browser research, Blender and Unreal Engine.
 
 Works in **Claude Code, OpenAI Codex, Cursor**, and other
-[Agent Skills](https://agentskills.io)-compatible clients. One canonical
+[Agent Skills](https://agentskills.io)-compatible hosts. One canonical
 `SKILL.md`, no per-host forks.
+
+> [!NOTE]
+> **Project status**
+> - **Agent Skill** — available now. Install it directly from this GitHub
+>   repository.
+> - **MCP bridge** — implemented and tested. Use it today from a local build.
+> - **npm** — `jev-agent-toolkit-mcp` is **not yet published**, so
+>   `npx jev-agent-toolkit-mcp` is not a current setup path.
+> - **Testing** — bridge and protocol behaviour are tested against a local mock
+>   upstream. No live TypeSafe API smoke test has been run yet, because no API
+>   key was available during development.
+
+**Contents:** [Install](#install) · [Jev concepts](#the-decision-gate) ·
+[MCP bridge](#mode-b--optional-mcp-bridge) ·
+[Tool orchestration](#what-else-the-skill-covers) · [Security](#security) ·
+[Compatibility](docs/compatibility.md) · [Examples](examples/)
 
 ---
 
@@ -16,7 +32,8 @@ Works in **Claude Code, OpenAI Codex, Cursor**, and other
 Jev does not write text or code. You give it a `state` and typed `questions`,
 and it returns typed answers with calibrated probabilities.
 
-That makes it a **judgment layer**, not a replacement for your agent:
+That makes it a **judgment layer**, not a replacement for your agent. Jev is not
+an autonomous agent and not a general-purpose LLM:
 
 ```
                         JEV  ·  bounded judgment
@@ -33,12 +50,13 @@ That makes it a **judgment layer**, not a replacement for your agent:
                            BLENDER        UNREAL       FUTURE TOOLS
 ```
 
-| Worker | Owns |
+| Part | Role |
 |---|---|
-| **Deterministic code** | Arithmetic, counting, dates, parsing, builds, thresholds, policy, control flow |
-| **Jev** | Bounded semantic judgment with a probability attached |
-| **General-purpose LLM** | Open-ended reasoning, prose, code, candidate generation |
-| **External tools** | Actions in the world |
+| **Jev** | Makes bounded semantic judgments, each with a probability attached |
+| **Host agent** (your coding agent's LLM) | Reasons, writes code and text, orchestrates the workflow |
+| **Deterministic code** | Exact operations: arithmetic, counting, dates, parsing, builds, thresholds, policy, control flow |
+| **External tools** | Perform actions in the world — browsers, Blender, Unreal, APIs |
+| **MCP** (optional) | An interoperability layer for reaching Jev through a tool call. It is a transport, not Jev itself |
 
 The value is in the separation. This toolkit deliberately does **not** route
 everything through Jev — keeping deterministic things deterministic is the
@@ -46,19 +64,43 @@ architecture.
 
 ## Install
 
+The skill and the MCP bridge are **separate**. Most users only need the skill.
+
+### A. Portable Agent Skill — start here
+
 ```bash
 npx skills add reiswaffel78/jev-agent-toolkit
 ```
 
-Or copy `skills/jev-agent-toolkit/` into your agent's skills directory —
-`.claude/skills/` for Claude Code, `.agents/skills/` for Codex and Cursor. See
-[docs/compatibility.md](docs/compatibility.md) for every path.
+This installs the skill for supported Agent Skills hosts. The `skills` installer
+runs through `npx`; if you would rather not use Node.js at all, copy
+`skills/jev-agent-toolkit/` into your agent's skills directory by hand —
+`.claude/skills/` for Claude Code, `.agents/skills/` for Codex and Cursor. The
+skill is plain Markdown. See [docs/compatibility.md](docs/compatibility.md) for
+every path.
+
+The skill does not need the MCP bridge or any npm package. To make actual Jev
+calls, you also need a TypeSafe API key in the environment:
 
 ```bash
 export TYPESAFE_API_KEY=...
 ```
 
-That is the whole dependency list.
+### B. Optional MCP bridge
+
+Only needed if you want Jev exposed as an MCP tool. It is set up separately — see
+[Mode B](#mode-b--optional-mcp-bridge) below.
+
+### What do I need?
+
+| What you want | Required |
+|---|---|
+| Use the Agent Skill | A compatible Agent Skills host |
+| Call Jev directly | TypeSafe API key + ability to run the official SDK or HTTP requests |
+| Use the Jev MCP bridge | TypeSafe API key + Node.js 20+ + an MCP-capable host |
+| Use Blender workflows | Blender tooling you have already set up (not bundled) |
+| Use Unreal workflows | Unreal tooling you have already set up (not bundled) |
+| Multi-agent delegation | Host support — otherwise the same work runs sequentially |
 
 ## The decision gate
 
@@ -120,15 +162,40 @@ decide which answers mattered.
 For hosts that prefer a shared tool surface, `mcp/jev/` is a minimal MCP server
 exposing exactly one tool, `jev_evaluate`.
 
-```bash
-claude mcp add --transport stdio --env TYPESAFE_API_KEY=$TYPESAFE_API_KEY \
-  jev -- npx -y jev-agent-toolkit-mcp
-```
-
-Verified configs for all three hosts: [examples/mcp-configs/](examples/mcp-configs/).
-
 It is **optional**. Everything works without it, and the skill says so plainly
 when neither mode is available rather than fabricating results.
+
+### Current method — local build
+
+```bash
+git clone https://github.com/reiswaffel78/jev-agent-toolkit.git
+cd jev-agent-toolkit/mcp/jev
+npm install
+npm run build
+```
+
+Then point your MCP host at the built entry point, with `TYPESAFE_API_KEY` in
+its environment:
+
+```bash
+node /absolute/path/to/jev-agent-toolkit/mcp/jev/dist/index.js
+```
+
+Host configurations for Claude Code, Codex and Cursor are in
+[examples/mcp-configs/](examples/mcp-configs/). Those files are written for the
+future `npx` form; for a local build, replace `command`/`args` with `node` and
+the absolute path above, as described in that folder's README.
+
+### After npm publication
+
+Once `jev-agent-toolkit-mcp` is published to npm, the local build becomes
+optional and hosts can launch the bridge directly:
+
+```bash
+npx -y jev-agent-toolkit-mcp
+```
+
+**This command does not work yet** — the package has not been published.
 
 ## What else the skill covers
 
@@ -169,8 +236,13 @@ comparison, degradation from irrelevant state, adversarial state — are in
 
 ## Security
 
-- Nothing is downloaded, executed or installed silently — no addons, no plugins,
-  no MCP servers.
+- The skill never installs external software on its own — no plugins, no MCP
+  servers, no Blender addons, no Unreal plugins.
+- The optional MCP bridge requires an explicit setup step by you. Once the
+  bridge is published to npm, choosing an `npx`-based setup will cause npm to
+  fetch that explicitly requested package and its declared dependencies.
+- No third-party MCP server is ever installed automatically. Blender and Unreal
+  integrations remain external capabilities and are not bundled.
 - `TYPESAFE_API_KEY` comes from the environment. Never committed, never logged,
   never passed as an argument.
 - The MCP bridge accepts no URL, runs no shell, and cannot return the key.
@@ -189,7 +261,7 @@ Full threat model: [docs/security-model.md](docs/security-model.md).
 | Optional Jev MCP bridge (TypeScript, tested) | Unreal integration |
 | Thin adapters for Claude Code, Codex, Cursor | Any third-party MCP server |
 | Runnable Python + JavaScript examples | A TypeSafe API key |
-| Verified host MCP configs | Anything that auto-installs |
+| Host MCP configs, checked against each host's documented schema | Anything that auto-installs |
 
 ## Relationship to TypeSafe's official skill
 

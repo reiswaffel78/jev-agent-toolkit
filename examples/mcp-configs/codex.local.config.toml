@@ -1,0 +1,16 @@
+# CURRENT (local build). Codex MCP configuration.
+# Merge into ~/.codex/config.toml, or a project-scoped .codex/config.toml.
+#
+# Replace /absolute/path/to/jev-agent-toolkit with where you cloned this repo
+# and ran `npm install && npm run build` in mcp/jev. Codex documents no path
+# variables, so the path must be absolute.
+#
+# `env_vars` forwards the named variable from your environment, so no secret is
+# written to this file.
+
+[mcp_servers.jev]
+command = "node"
+args = ["/absolute/path/to/jev-agent-toolkit/mcp/jev/dist/index.js"]
+env_vars = ["TYPESAFE_API_KEY"]
+startup_timeout_sec = 10
+tool_timeout_sec = 60
