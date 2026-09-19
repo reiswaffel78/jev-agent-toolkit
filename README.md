@@ -18,9 +18,11 @@ Works in **Claude Code, OpenAI Codex, Cursor**, and other
 > - **MCP bridge** — implemented and tested. Use it today from a local build.
 > - **npm** — `jev-agent-toolkit-mcp` is **not yet published**, so
 >   `npx jev-agent-toolkit-mcp` is not a current setup path.
-> - **Testing** — bridge and protocol behaviour are tested against a local mock
->   upstream. No live TypeSafe API smoke test has been run yet, because no API
->   key was available during development.
+> - **Testing** — CI and protocol tests use a local mock upstream. On 2026-09-19,
+>   a manual synthetic live smoke test against the TypeSafe API succeeded via
+>   direct HTTP, the JavaScript SDK and the local MCP bridge. This live test is
+>   not part of automated CI; the Python SDK was not live-tested, and host E2E
+>   tests in Claude Code, Codex and Cursor remain outstanding.
 
 **Contents:** [Install](#install) · [Jev concepts](#the-decision-gate) ·
 [MCP bridge](#mode-b--optional-mcp-bridge) ·
@@ -184,9 +186,9 @@ node /absolute/path/to/jev-agent-toolkit/mcp/jev/dist/index.js
 ```
 
 Host configurations for Claude Code, Codex and Cursor are in
-[examples/mcp-configs/](examples/mcp-configs/). Those files are written for the
-future `npx` form; for a local build, replace `command`/`args` with `node` and
-the absolute path above, as described in that folder's README.
+[examples/mcp-configs/](examples/mcp-configs/). The `.local.*` files are the
+current local-build configurations: `claude-code.local.mcp.json`,
+`codex.local.config.toml` and `cursor.local.mcp.json`.
 
 ### After npm publication
 
@@ -196,6 +198,10 @@ optional and hosts can launch the bridge directly:
 ```bash
 npx -y jev-agent-toolkit-mcp
 ```
+
+The future npm configurations are `claude-code.npm.mcp.json`,
+`codex.npm.config.toml` and `cursor.npm.mcp.json`; they are not usable until the
+package is published.
 
 **This command does not work yet** — the package has not been published.
 
@@ -301,7 +307,7 @@ validator:
 skills-ref validate ./skills/jev-agent-toolkit
 ```
 
-33 tests, including a full MCP protocol round-trip against a local mock upstream
+34 tests, including a full MCP protocol round-trip against a local mock upstream
 — no API key needed, nothing spent. The round-trip covers handshake, tool
 discovery, batching, model override, local validation and 401 redaction, and
 asserts the server negotiates the 2026-07-28 protocol revision while still

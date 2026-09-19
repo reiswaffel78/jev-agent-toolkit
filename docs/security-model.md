@@ -42,7 +42,8 @@ A test asserts that the advertised tool surface contains no `url`, `endpoint`,
 
 - Read once from the environment at startup. Never from a tool argument.
 - `redact()` runs on every outbound message and log line, removing the
-  configured key value, `Bearer` tokens and `sk-`-style tokens.
+  configured key value, `Bearer` tokens, `sk-`-style tokens and `apikey_`
+  tokens.
 - Exact-value substitution is the reliable branch; the regexes are a secondary
   net for known token shapes and are not a guarantee. The server warns at
   startup if the key looks too short to redact reliably.

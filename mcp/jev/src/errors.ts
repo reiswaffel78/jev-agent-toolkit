@@ -54,7 +54,7 @@ export function redact(text: string): string {
   // Secondary net for known token shapes, in case the exact value is absent
   // from the environment (e.g. rotated after startup).
   return out
-    .replace(/\b(sk|tsk|key)[-_][A-Za-z0-9_-]{8,}/gi, "[REDACTED]")
+    .replace(/\b(sk|tsk|key|apikey)[-_][A-Za-z0-9_-]{8,}/gi, "[REDACTED]")
     .replace(/(Bearer\s+)[A-Za-z0-9._~+/-]{8,}=*/gi, "$1[REDACTED]");
 }
 

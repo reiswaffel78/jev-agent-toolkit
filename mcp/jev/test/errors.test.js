@@ -35,6 +35,14 @@ describe("redact", () => {
     assert.equal(out.includes("sk-abcdefgh12345678"), false);
   });
 
+  it("removes apikey-style tokens that differ from the configured key", () => {
+    const token = "apikey_example1234567890";
+    assert.notEqual(token, process.env.TYPESAFE_API_KEY);
+    const out = redact(`token ${token} leaked`);
+    assert.equal(out.includes(token), false);
+    assert.equal(out.includes("[REDACTED]"), true);
+  });
+
   it("leaves ordinary text alone", () => {
     assert.equal(redact("a normal message"), "a normal message");
   });
