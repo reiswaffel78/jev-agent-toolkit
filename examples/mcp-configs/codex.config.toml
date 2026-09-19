@@ -1,0 +1,13 @@
+# Codex MCP configuration.
+# Merge into ~/.codex/config.toml, or a project-scoped .codex/config.toml.
+#
+# `env_vars` forwards the named variable from your environment, so no secret is
+# written to this file. Use [mcp_servers.jev.env] only for literal non-secret
+# values.
+
+[mcp_servers.jev]
+command = "npx"
+args = ["-y", "jev-agent-toolkit-mcp"]
+env_vars = ["TYPESAFE_API_KEY"]
+startup_timeout_sec = 10
+tool_timeout_sec = 60
