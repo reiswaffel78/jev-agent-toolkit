@@ -97,7 +97,7 @@ Only needed if you want Jev exposed as an MCP tool. It is set up separately — 
 |---|---|
 | Use the Agent Skill | A compatible Agent Skills host |
 | Call Jev directly | TypeSafe API key + ability to run the official SDK or HTTP requests |
-| Use the Jev MCP bridge | TypeSafe API key + Node.js 20+ + an MCP-capable host |
+| Use the Jev MCP bridge | TypeSafe API key + Node.js 22+ + an MCP-capable host |
 | Use Blender workflows | Blender tooling you have already set up (not bundled) |
 | Use Unreal workflows | Unreal tooling you have already set up (not bundled) |
 | Multi-agent delegation | Host support — otherwise the same work runs sequentially |

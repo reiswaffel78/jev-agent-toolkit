@@ -2,7 +2,7 @@
 name: jev-agent-toolkit
 description: Build with Jev, TypeSafe's System One model, as a bounded judgment layer alongside general-purpose agents. Use when calling the TypeSafe API or SDKs, when designing Choice, Score or Noul questions, when classifying, routing, ranking or filtering with confidence thresholds, or when the user mentions Jev, TypeSafe, System One, or bounded semantic judgment. Also covers capability-driven orchestration of external tools (browser research, MCP servers, Blender, Unreal Engine) and multi-agent delegation with sequential fallback.
 license: MIT
-compatibility: Calling Jev needs TYPESAFE_API_KEY plus either code/HTTP execution or the optional MCP bridge (Node.js 20+). Tool workflows require the relevant external tooling to be installed already — this skill installs nothing.
+compatibility: Calling Jev needs TYPESAFE_API_KEY plus either code/HTTP execution or the optional MCP bridge (Node.js 22+). Tool workflows require the relevant external tooling to be installed already — this skill installs nothing.
 metadata:
   homepage: https://github.com/reiswaffel78/jev-agent-toolkit
   version: "1.0.0"

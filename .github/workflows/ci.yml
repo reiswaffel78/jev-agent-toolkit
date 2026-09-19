@@ -1,0 +1,98 @@
+# Validates the repository on every push to main and every pull request into it.
+#
+# No secrets are used or required. No TypeSafe API calls are made: the MCP
+# bridge tests run against a local mock upstream, and TYPESAFE_API_KEY is never
+# read from repository secrets. The only network access is npm registry traffic
+# for `npm ci` and `npm audit`.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repo-checks:
+    name: Skill validation and example syntax
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Actions are pinned to full commit SHAs; the trailing comment records the
+      # release tag each SHA was taken from.
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          # No npm install happens in this job, so there is nothing to cache.
+          package-manager-cache: false
+
+      - name: Validate skill frontmatter, internal links and secret scan
+        run: node scripts/validate.mjs
+
+      # Syntax only. This is not an SDK or API test: neither SDK is installed.
+      - name: Check JavaScript example syntax
+        run: node --check examples/direct-api/triage.mjs
+
+      - name: Check Python example syntax
+        run: python3 -m py_compile examples/direct-api/triage.py
+
+  mcp-bridge:
+    name: MCP bridge (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        # package.json declares "node": ">=22". Test that floor (Maintenance LTS)
+        # and the Active LTS line.
+        node-version: [22, 24]
+    defaults:
+      run:
+        working-directory: mcp/jev
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+          cache-dependency-path: mcp/jev/package-lock.json
+
+      - name: Install dependencies from lockfile
+        run: npm ci
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      # Includes the MCP protocol round-trip tests against a local mock
+      # upstream. No API key, no live TypeSafe calls.
+      - name: Test
+        run: npm test
+
+      # Fails on high or critical advisories only, so low-severity noise in
+      # transitive dev dependencies cannot block contributions. The result does
+      # not depend on the Node version, so it runs on one matrix leg.
+      - name: Audit dependencies (fail on high or critical)
+        if: matrix.node-version == 24
+        run: npm audit --audit-level=high

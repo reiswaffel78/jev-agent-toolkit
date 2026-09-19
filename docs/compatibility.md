@@ -59,7 +59,7 @@ Working configs: [`examples/mcp-configs/`](../examples/mcp-configs/).
 | Portable skill | None — it is Markdown |
 | Direct API (Python) | `typesafe-sdk`, `TYPESAFE_API_KEY` |
 | Direct API (JavaScript) | `@typesafe-ai/sdk`, Node.js 20+, `TYPESAFE_API_KEY` |
-| MCP bridge | Node.js 20+, `TYPESAFE_API_KEY` |
+| MCP bridge | Node.js 22+, `TYPESAFE_API_KEY` |
 
 ## Versions this was built against
 
