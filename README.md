@@ -1,5 +1,7 @@
 # jev-agent-toolkit
 
+[![CI](https://github.com/reiswaffel78/jev-agent-toolkit/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/reiswaffel78/jev-agent-toolkit/actions/workflows/ci.yml)
+
 A portable **Agent Skill** that teaches coding agents to build with
 [Jev](https://docs.typesafe.ai), TypeSafe's System One model, as a bounded
 judgment layer — plus an optional MCP bridge and capability-driven workflows for
