@@ -29,7 +29,7 @@ break batching — the most valuable performance property Jev has.
 
 ```bash
 npm install
-npm test          # builds, then runs 33 tests
+npm test          # builds, then runs 34 tests
 npm run build
 ```
 

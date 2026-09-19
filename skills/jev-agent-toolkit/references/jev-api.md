@@ -108,7 +108,7 @@ maximum 10. Array order defines the level numbering, starting at 0.
                            "confidence": 0.62 },
     "is_refund_request": { "type": "noul", "noul": 0.88 }
   },
-  "usage": { "input_tokens": 1180, "output_tokens": 0 }
+  "usage": { "input_tokens": 1180, "output_tokens": 48 }
 }
 ```
 

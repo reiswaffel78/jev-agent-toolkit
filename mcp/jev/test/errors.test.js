@@ -35,6 +35,16 @@ describe("redact", () => {
     assert.equal(out.includes("sk-abcdefgh12345678"), false);
   });
 
+  it("removes TypeSafe apikey_ tokens via the pattern net, not the exact match", () => {
+    const token = "apikey_example1234567890";
+    // Differs from the configured key, so only the pattern branch can remove it.
+    assert.notEqual(token, process.env.TYPESAFE_API_KEY);
+    const out = redact(`upstream echoed ${token} back`);
+    assert.equal(out.includes(token), false);
+    assert.equal(out.includes("example1234567890"), false);
+    assert.equal(out.includes("[REDACTED]"), true);
+  });
+
   it("leaves ordinary text alone", () => {
     assert.equal(redact("a normal message"), "a normal message");
   });
