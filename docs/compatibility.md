@@ -111,6 +111,30 @@ Host-specific observations:
   Its agent reported a brief reconnect after the call, after which the server
   was connected again. The negotiated revision could not be determined.
 
+## npm package verification
+
+`jev-agent-toolkit-mcp` was published on 2026-09-20 and verified the same day
+from the public registry, independently of the local build.
+
+| Check | Result |
+|---|---|
+| Registry metadata | PASS — `latest = 0.1.0`, 15 files, 36417 B unpacked, MIT |
+| Fresh `npm install` into an empty directory | PASS — 15 files, including `LICENSE` and `package.json` |
+| Handshake on the 2025-11-25 era | PASS — `serverInfo` `jev-agent-toolkit` 0.1.0, one tool `jev_evaluate` |
+| Handshake on the 2026-07-28 era | PASS — same `serverInfo` and tool |
+| `npx -y jev-agent-toolkit-mcp@0.1.0` from an empty directory | PASS — same `serverInfo` and tool |
+
+Tarball integrity as published:
+`sha512-XMOVpzHJfbIFY6WXwRGekMA3qqyOr9eE5rl/9GTaDrjHdu4QtuRMrlCsXGMkN8OcxGyWI1eAMGDqePwHX9fbqw==`.
+
+Both handshakes ran with a synthetic key and an unreachable
+`TYPESAFE_BASE_URL`, so no request reached the TypeSafe API. The `serverInfo`
+version is read from the package's own `package.json` at runtime, so these runs
+also confirm the published tarball carries the file that derivation depends on.
+
+As with every other result here, this is a one-off manual check, not an
+automated test.
+
 ## Runtime requirements
 
 | Component | Requirement |
@@ -156,5 +180,9 @@ era — that is the client's choice, not a limitation of the bridge.
   re-verified on every change. Every live result recorded here is a one-off
   manual smoke test: it says the path works, not that it is fast, reliable
   under load, or semantically accurate in general.
-- `jev-agent-toolkit-mcp` is not published to npm, so every host run above used
-  a local build of the bridge.
+- The host runs recorded above predate the npm release and used a local build
+  of the bridge.
+- `mcp/jev/README.md` is the page npmjs.com renders for the package. Published
+  versions are immutable, so edits to it reach npmjs.com only with the next
+  published version — the copy shipped inside 0.1.0 still describes npm as
+  unpublished.

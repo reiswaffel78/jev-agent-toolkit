@@ -2,15 +2,32 @@
 
 Configs for the optional Jev MCP bridge, in two sets:
 
-- **CURRENT — local build.** Works today.
-- **FUTURE — npm package.** `jev-agent-toolkit-mcp` is **not yet published to
-  npm**, so these configs fail until it is.
+- **npm package.** `jev-agent-toolkit-mcp` is published, so these configs work
+  as they stand. This is the regular path.
+- **Local build.** For developing the bridge itself, or running an unpublished
+  change.
 
 The configs were checked against each host's documented schema on 2026-09-19.
 They have not been runtime-tested inside Claude Code, Codex or Cursor; the
 bridge itself is tested with the official MCP client (`mcp/jev/test/`).
 
-## CURRENT — local build
+## npm package — the regular path
+
+These configs launch the published package with `npx`, so nothing has to be
+cloned or built first.
+
+| File | Host | Destination |
+|---|---|---|
+| `claude-code.npm.mcp.json` | Claude Code | `.mcp.json` in your project root |
+| `codex.npm.config.toml` | OpenAI Codex | `~/.codex/config.toml` or `.codex/config.toml` |
+| `cursor.npm.mcp.json` | Cursor | `.cursor/mcp.json` |
+
+The only difference from the local-build configs is the launch command:
+`npx -y jev-agent-toolkit-mcp` in place of `node` plus the absolute path.
+
+## Local build — for developing the bridge
+
+Use this to run an unpublished change, or to work on the bridge itself.
 
 Build the bridge once:
 
@@ -56,21 +73,6 @@ keep only a reference to the environment variable.
 
 On Windows, write the path with forward slashes (`C:/path/to/...`) or escape the
 backslashes inside JSON.
-
-## FUTURE — npm package
-
-> **Not usable yet.** These configs launch `npx -y jev-agent-toolkit-mcp`, which
-> only works once the package has been published to npm. Until then, use the
-> CURRENT configs above.
-
-| File | Host | Destination |
-|---|---|---|
-| `claude-code.npm.mcp.json` | Claude Code | `.mcp.json` in your project root |
-| `codex.npm.config.toml` | OpenAI Codex | `~/.codex/config.toml` or `.codex/config.toml` |
-| `cursor.npm.mcp.json` | Cursor | `.cursor/mcp.json` |
-
-After publication, the only difference from the CURRENT configs is the launch
-command: `npx -y jev-agent-toolkit-mcp` in place of `node` plus the absolute path.
 
 ## The one thing that catches everybody
 

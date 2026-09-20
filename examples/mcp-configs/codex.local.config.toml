@@ -1,4 +1,4 @@
-# CURRENT (local build). Codex MCP configuration.
+# Local build. Codex MCP configuration.
 # Merge into ~/.codex/config.toml, or a project-scoped .codex/config.toml.
 #
 # Replace /absolute/path/to/jev-agent-toolkit with where you cloned this repo

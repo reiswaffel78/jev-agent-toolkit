@@ -25,17 +25,26 @@ Returns `model`, `answers` (keyed by your question ids) and `usage`, as both
 One tool rather than three. Per-primitive tools would duplicate validation and
 break batching — the most valuable performance property Jev has.
 
-## Build and run
+## Install and run
+
+From npm — the regular path:
+
+```bash
+npx -y jev-agent-toolkit-mcp
+```
+
+Or build it locally to develop the bridge itself:
 
 ```bash
 npm install
-npm test          # builds, then runs 34 tests
+npm test          # builds, then runs 35 tests
 npm run build
 ```
 
-Configure your host to run `node /abs/path/to/mcp/jev/dist/index.js`, or
-`npx -y jev-agent-toolkit-mcp` once published. Verified configs for Claude Code,
-Codex and Cursor: [`examples/mcp-configs/`](../../examples/mcp-configs/).
+and configure your host to run `node /abs/path/to/mcp/jev/dist/index.js`.
+
+Verified configs for Claude Code, Codex and Cursor:
+[`examples/mcp-configs/`](../../examples/mcp-configs/).
 
 ## Environment
 

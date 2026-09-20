@@ -1,6 +1,7 @@
 # jev-agent-toolkit
 
 [![CI](https://github.com/reiswaffel78/jev-agent-toolkit/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/reiswaffel78/jev-agent-toolkit/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/jev-agent-toolkit-mcp)](https://www.npmjs.com/package/jev-agent-toolkit-mcp)
 
 A portable **Agent Skill** that teaches coding agents to build with
 [Jev](https://docs.typesafe.ai), TypeSafe's System One model, as a bounded
@@ -15,9 +16,13 @@ Works in **Claude Code, OpenAI Codex, Cursor**, and other
 > **Project status**
 > - **Agent Skill** — available now. Install it directly from this GitHub
 >   repository.
-> - **MCP bridge** — implemented and tested. Use it today from a local build.
-> - **npm** — `jev-agent-toolkit-mcp` is **not yet published**, so
->   `npx jev-agent-toolkit-mcp` is not a current setup path.
+> - **MCP bridge** — implemented and tested. Install it from npm, or build it
+>   locally when developing the bridge itself.
+> - **npm** — `jev-agent-toolkit-mcp` is **published**, so
+>   `npx -y jev-agent-toolkit-mcp` is the regular setup path. Installing 0.1.0
+>   from the registry and the resulting MCP handshake were verified on
+>   2026-09-20 — see
+>   [npm package verification](docs/compatibility.md#npm-package-verification).
 > - **Testing** — CI and the protocol tests run against a local mock upstream;
 >   there is no automated live TypeSafe test. Manual synthetic live checks
 >   against the real API passed on every client path — direct HTTP, the Python
@@ -174,7 +179,20 @@ exposing exactly one tool, `jev_evaluate`.
 It is **optional**. Everything works without it, and the skill says so plainly
 when neither mode is available rather than fabricating results.
 
-### Current method — local build
+### Recommended — the published npm package
+
+```bash
+npx -y jev-agent-toolkit-mcp
+```
+
+Ready-made configs are in [examples/mcp-configs/](examples/mcp-configs/):
+`claude-code.npm.mcp.json`, `codex.npm.config.toml` and
+`cursor.npm.mcp.json`. Keep `TYPESAFE_API_KEY` in the host's environment —
+the configs reference it rather than storing it.
+
+### Local build — for developing the bridge
+
+Use this to run an unpublished change, or to work on the bridge itself:
 
 ```bash
 git clone https://github.com/reiswaffel78/jev-agent-toolkit.git
@@ -190,24 +208,10 @@ its environment:
 node /absolute/path/to/jev-agent-toolkit/mcp/jev/dist/index.js
 ```
 
-Ready-made local-build configs are in
-[examples/mcp-configs/](examples/mcp-configs/): `claude-code.local.mcp.json`,
+The matching configs are `claude-code.local.mcp.json`,
 `codex.local.config.toml` and `cursor.local.mcp.json`. Replace the
 `/absolute/path/to/jev-agent-toolkit` placeholder with where you cloned the
 repository.
-
-### After npm publication
-
-Once `jev-agent-toolkit-mcp` is published to npm, the local build becomes
-optional and hosts can launch the bridge directly:
-
-```bash
-npx -y jev-agent-toolkit-mcp
-```
-
-**This command does not work yet** — the package has not been published. The
-matching configs for that stage are `claude-code.npm.mcp.json`,
-`codex.npm.config.toml` and `cursor.npm.mcp.json` in the same folder.
 
 ## What else the skill covers
 
@@ -311,7 +315,7 @@ validator:
 skills-ref validate ./skills/jev-agent-toolkit
 ```
 
-34 tests, including a full MCP protocol round-trip against a local mock upstream
+35 tests, including a full MCP protocol round-trip against a local mock upstream
 — no API key needed, nothing spent. The round-trip covers handshake, tool
 discovery, batching, model override, local validation and 401 redaction, and
 asserts the server negotiates the 2026-07-28 protocol revision while still

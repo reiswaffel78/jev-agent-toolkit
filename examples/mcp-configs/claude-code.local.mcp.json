@@ -1,5 +1,5 @@
 {
-  "_comment": "CURRENT (local build). Claude Code project-scoped .mcp.json. Replace /absolute/path/to/jev-agent-toolkit with where you cloned this repo and ran `npm install && npm run build` in mcp/jev. Claude Code expands ${VAR}, so the key stays in your environment. Remove this _comment key before use.",
+  "_comment": "Local build. Claude Code project-scoped .mcp.json. Replace /absolute/path/to/jev-agent-toolkit with where you cloned this repo and ran `npm install && npm run build` in mcp/jev. Claude Code expands ${VAR}, so the key stays in your environment. Remove this _comment key before use.",
   "mcpServers": {
     "jev": {
       "type": "stdio",
