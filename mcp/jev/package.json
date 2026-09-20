@@ -3,12 +3,22 @@
   "version": "1.0.0",
   "description": "Minimal MCP server exposing TypeSafe's Jev System One model as a single narrow evaluation tool.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reiswaffel78/jev-agent-toolkit.git",
+    "directory": "mcp/jev"
+  },
+  "homepage": "https://github.com/reiswaffel78/jev-agent-toolkit/tree/main/mcp/jev#readme",
+  "bugs": {
+    "url": "https://github.com/reiswaffel78/jev-agent-toolkit/issues"
+  },
   "type": "module",
   "bin": {
     "jev-agent-toolkit-mcp": "dist/index.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "LICENSE"
   ],
   "engines": {
     "node": ">=22"
@@ -17,7 +27,7 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "test": "npm run build && node --test test/*.test.js",
-    "prepublishOnly": "npm run build"
+    "prepack": "npm run build"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "^2.0.0",
