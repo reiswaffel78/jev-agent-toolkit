@@ -52,6 +52,42 @@ exits reporting a missing key.
 
 Working configs: [`examples/mcp-configs/`](../examples/mcp-configs/).
 
+## Host end-to-end verification
+
+Each host loaded the local MCP bridge through its **own** MCP integration,
+called the tool itself, and received a real answer from the TypeSafe API. All
+three runs used the same synthetic "duplicate charge" state with one Choice
+(`topic`), one Score (`urgency`) and one Noul (`asks_refund`) batched into a
+single request.
+
+| Host | Version | Result | Jev model | Tokens in/out | Tool latency | MCP revision | Source |
+|---|---|---|---|---|---|---|---|
+| Claude Code | 2.1.275 (model `claude-sonnet-5`) | PASS | `jev-1.13.0` | 424 / 71 | 810 ms | `2025-11-25` | Observed in this repository on 2026-09-19 |
+| OpenAI Codex | `codex-cli` 0.155.0-alpha.9.2 | PASS | `jev-1.13.0` | 419 / 71 | ~1.13 s | not evidenced | Reported by that host's agent |
+| Cursor | 3.21.16 (Windows 10, Node v22.16.0) | PASS | `jev-1.13.0` | 433 / 71 | 713 ms | not determinable | Reported by that host's agent |
+
+In every run the answers were structurally valid — `answers`, `model` and
+`usage` at the top level, the documented fields per primitive, a `choice` from
+the supplied criteria, a score inside the defined range, and a Noul without a
+`confidence` field — and the three results were comparable across hosts.
+
+Read these as single manual runs, not as independent reproduction, load testing
+or stability testing, and not as evidence of general semantic accuracy. Only the
+Claude Code run was observed directly in this repository; the Codex and Cursor
+figures come from those hosts' own agent reports.
+
+Host-specific observations:
+
+- **Claude Code** loads MCP tools on demand, so it first resolved the tool
+  schema and then called `mcp__jev__jev_evaluate`. It connected on the 2025 era
+  because version negotiation is opt-in on the client side.
+- **Codex** passed, but no evidence of the negotiated protocol revision was
+  captured.
+- **Cursor** used a personal MCP configuration with an environment-variable
+  reference and exposed the server as `user-jev` with the tool `jev_evaluate`.
+  Its agent reported a brief reconnect after the call, after which the server
+  was connected again. The negotiated revision could not be determined.
+
 ## Runtime requirements
 
 | Component | Requirement |
@@ -92,3 +128,9 @@ era — that is the client's choice, not a limitation of the bridge.
 - Blender has no vendor-neutral official MCP server; Unreal's first-party plugin
   is marked Experimental by Epic. Both domains are therefore written as
   capability discovery rather than integration instructions.
+- The Python SDK has not been exercised against the live API; only the
+  JavaScript SDK, direct HTTP and the MCP bridge have.
+- CI runs against a local mock upstream only. No automated test contacts the
+  TypeSafe API, so the host results above are not re-verified on every change.
+- `jev-agent-toolkit-mcp` is not published to npm, so every host run above used
+  a local build of the bridge.

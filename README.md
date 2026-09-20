@@ -18,12 +18,14 @@ Works in **Claude Code, OpenAI Codex, Cursor**, and other
 > - **MCP bridge** — implemented and tested. Use it today from a local build.
 > - **npm** — `jev-agent-toolkit-mcp` is **not yet published**, so
 >   `npx jev-agent-toolkit-mcp` is not a current setup path.
-> - **Testing** — CI and the protocol tests run against a local mock upstream.
->   In addition, a manual synthetic live smoke test against the real TypeSafe
->   API passed on 2026-09-19 via direct HTTP, the JavaScript SDK and the local
->   MCP bridge. It is not part of automated CI. The Python SDK was not tested
->   live, and end-to-end tests inside Claude Code, Codex and Cursor are still
->   pending.
+> - **Testing** — CI and the protocol tests run against a local mock upstream;
+>   there is no automated live TypeSafe test. Manual synthetic live checks
+>   against the real API passed via direct HTTP, the JavaScript SDK and the
+>   local MCP bridge, and an end-to-end run through each host's own MCP
+>   integration passed in Claude Code, Codex and Cursor — see
+>   [host end-to-end verification](docs/compatibility.md#host-end-to-end-verification).
+>   These are one-off manual runs, not stability testing. The Python SDK has
+>   **not** been tested live.
 
 **Contents:** [Install](#install) · [Jev concepts](#the-decision-gate) ·
 [MCP bridge](#mode-b--optional-mcp-bridge) ·
