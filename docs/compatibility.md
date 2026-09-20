@@ -52,6 +52,29 @@ exits reporting a missing key.
 
 Working configs: [`examples/mcp-configs/`](../examples/mcp-configs/).
 
+## Direct client verification
+
+These are direct client paths to the API, **not** host end-to-end runs: no agent
+host is involved. Each was exercised once by hand against the real endpoint
+`https://api.typesafe.ai/v1/systemone`, with synthetic data only.
+
+| Path | Result | Jev model | Notes |
+|---|---|---|---|
+| Direct HTTP | PASS | `jev-1.13.0` | Raw request, used as the reference for the wire format |
+| Python SDK `typesafe-sdk` 0.7.0 | PASS | `jev-1.13.0` | Python 3.11.15, isolated temporary virtual environment |
+| JavaScript SDK `@typesafe-ai/sdk` | PASS | `jev-1.13.0` | Same request shape as the HTTP path |
+| Local MCP bridge | PASS | `jev-1.13.0` | Bridge called directly with the official MCP client |
+
+The Python run (2026-09-20) issued exactly one batched `system_one()` call
+through `TypeSafeClient`, asking `jev-latest` and receiving `jev-1.13.0`, with
+one Choice, one Score and one Noul in a single request. It took 826 ms and
+reported 433 input and 71 output tokens. The Choice returned `billing` at
+confidence 1.0; the Score returned 1.88 on the 0–3 scale at confidence 0.75;
+the Noul returned 0.99 and, as documented, carried no `confidence` field. The
+response was a `SystemOneResponse` with `model`, `usage` and `answers`, plus the
+per-primitive accessors `choices`, `scores` and `nouls`. No mock, no HTTP
+fallback and no MCP bridge were involved.
+
 ## Host end-to-end verification
 
 Each host loaded the local MCP bridge through its **own** MCP integration,
@@ -128,9 +151,10 @@ era — that is the client's choice, not a limitation of the bridge.
 - Blender has no vendor-neutral official MCP server; Unreal's first-party plugin
   is marked Experimental by Epic. Both domains are therefore written as
   capability discovery rather than integration instructions.
-- The Python SDK has not been exercised against the live API; only the
-  JavaScript SDK, direct HTTP and the MCP bridge have.
 - CI runs against a local mock upstream only. No automated test contacts the
-  TypeSafe API, so the host results above are not re-verified on every change.
+  TypeSafe API, so neither the direct nor the host results above are
+  re-verified on every change. Every live result recorded here is a one-off
+  manual smoke test: it says the path works, not that it is fast, reliable
+  under load, or semantically accurate in general.
 - `jev-agent-toolkit-mcp` is not published to npm, so every host run above used
   a local build of the bridge.

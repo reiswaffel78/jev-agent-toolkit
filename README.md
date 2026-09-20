@@ -20,12 +20,14 @@ Works in **Claude Code, OpenAI Codex, Cursor**, and other
 >   `npx jev-agent-toolkit-mcp` is not a current setup path.
 > - **Testing** — CI and the protocol tests run against a local mock upstream;
 >   there is no automated live TypeSafe test. Manual synthetic live checks
->   against the real API passed via direct HTTP, the JavaScript SDK and the
->   local MCP bridge, and an end-to-end run through each host's own MCP
->   integration passed in Claude Code, Codex and Cursor — see
->   [host end-to-end verification](docs/compatibility.md#host-end-to-end-verification).
->   These are one-off manual runs, not stability testing. The Python SDK has
->   **not** been tested live.
+>   against the real API passed on every client path — direct HTTP, the Python
+>   SDK, the JavaScript SDK and the local MCP bridge — and an end-to-end run
+>   through each host's own MCP integration passed in Claude Code, Codex and
+>   Cursor. See
+>   [direct client verification](docs/compatibility.md#direct-client-verification)
+>   and [host end-to-end verification](docs/compatibility.md#host-end-to-end-verification).
+>   These are one-off manual runs: no load testing, no stability testing, and no
+>   evidence of general semantic accuracy.
 
 **Contents:** [Install](#install) · [Jev concepts](#the-decision-gate) ·
 [MCP bridge](#mode-b--optional-mcp-bridge) ·

@@ -193,7 +193,14 @@ response.nouls["is_refund_request"].noul   # -> 0.88
 
 Note the accessor difference between SDKs: **Python groups answers by primitive**
 (`response.choices`, `response.scores`, `response.nouls`), while the HTTP API and
-the JavaScript SDK return one flat `answers` map keyed by question id.
+the JavaScript SDK return one flat `answers` map keyed by question id. The
+Python response also exposes a flat `answers` mapping alongside those accessors.
+
+One more Python-specific detail, observed against the live API: in a Score
+answer, `probabilities` is keyed by **integer** level numbers (`0`, `1`, …),
+whereas the HTTP response and the JavaScript SDK use **string** keys (`"0"`,
+`"1"`, …). Normalise the keys when the same code reads results from more than
+one of these paths.
 
 `AsyncTypeSafeClient` is the asyncio equivalent. Both work as context managers.
 
