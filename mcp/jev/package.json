@@ -1,6 +1,6 @@
 {
   "name": "jev-agent-toolkit-mcp",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Minimal MCP server exposing TypeSafe's Jev System One model as a single narrow evaluation tool.",
   "license": "MIT",
   "repository": {

@@ -7,12 +7,17 @@
  */
 import { strict as assert } from "node:assert";
 import { createServer } from "node:http";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { after, before, describe, it } from "node:test";
 import { Client } from "@modelcontextprotocol/client";
 import { StdioClientTransport } from "@modelcontextprotocol/client/stdio";
 
 const SERVER_ENTRY = fileURLToPath(new URL("../dist/index.js", import.meta.url));
+/** Read from disk on purpose: a hard-coded copy here would defeat the check. */
+const PACKAGE_VERSION = JSON.parse(
+  readFileSync(new URL("../package.json", import.meta.url), "utf8"),
+).version;
 const FAKE_KEY = "test-key-do-not-use-abc123";
 
 const UPSTREAM_RESPONSE = {
@@ -89,6 +94,18 @@ describe("jev-agent-toolkit MCP server", () => {
 
   it("starts and completes the MCP handshake", () => {
     assert.ok(client);
+  });
+
+  it("reports the package version as serverInfo, not a hard-coded literal", () => {
+    const serverInfo = client.getServerVersion();
+    assert.ok(serverInfo, "the legacy handshake requires the server to identify itself");
+    assert.equal(serverInfo.name, "jev-agent-toolkit");
+    assert.match(PACKAGE_VERSION, /^\d+\.\d+\.\d+/, "package.json must carry a real version");
+    assert.equal(
+      serverInfo.version,
+      PACKAGE_VERSION,
+      "serverInfo must track package.json so a published version cannot drift from the handshake",
+    );
   });
 
   it("still serves a legacy-era client (this client negotiates 'legacy' by default)", () => {

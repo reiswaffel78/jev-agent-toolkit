@@ -1,7 +1,18 @@
+import { createRequire } from "node:module";
 import { McpServer } from "@modelcontextprotocol/server";
 import type { EntryType, Questions, SystemOneResult, TypeSafeClient } from "@typesafe-ai/sdk";
 import { mapError, redact } from "./errors.js";
 import { evaluateInput, evaluateOutput } from "./schemas.js";
+
+/**
+ * The handshake must advertise the published package version. Reading it from
+ * package.json keeps serverInfo from drifting the way a hard-coded literal
+ * does. The relative path resolves the same from `src/` and from the built
+ * `dist/`, and npm always ships package.json inside the tarball.
+ */
+const { version: PACKAGE_VERSION } = createRequire(import.meta.url)("../package.json") as {
+  version: string;
+};
 
 export interface ServerOptions {
   client: Pick<TypeSafeClient, "systemOne">;
@@ -23,7 +34,7 @@ Batch every question you might need into a single call: questions are evaluated 
 
 Confidence describes how concentrated the probability distribution is, not whether the answer is correct. Apply thresholds and policy in your own code, and never let an answer alone authorise an irreversible action.`;
 
-export function createServer({ client, onEvent, version = "1.0.0" }: ServerOptions): McpServer {
+export function createServer({ client, onEvent, version = PACKAGE_VERSION }: ServerOptions): McpServer {
   const server = new McpServer(
     { name: "jev-agent-toolkit", version },
     { capabilities: { tools: {} } },
