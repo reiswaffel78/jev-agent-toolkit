@@ -1,17 +1,17 @@
 # Graph Report - jev-agent-toolkit  (2026-10-18)
 
 ## Corpus Check
-- 44 files · ~24,346 words
+- 39 files · ~23,569 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 7 file(s) not represented in the graph (top: (none) 4, .toml 2, .example 1)
+- Unclassified: 8 file(s) not represented in the graph (top: (none) 5, .toml 2, .example 1)
 
 ## Summary
-- 340 nodes · 371 edges · 28 communities (23 shown, 5 thin omitted)
+- 330 nodes · 365 edges · 26 communities (25 shown, 1 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.95)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `700a3fdc`
+- Built from commit: `e7f5b2e3`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -22,7 +22,7 @@
 - server.ts
 - jev-agent-toolkit
 - compilerOptions
-- Security model
+- jev-agent-toolkit-mcp
 - Decision record
 - schemas.ts
 - Tool orchestration
@@ -39,10 +39,8 @@
 - Generic Agent Skills clients
 - Blender workflows
 - Claude Code adapter
-- CLAUDE.md
-- graphify
-- AGENTS.md
-- .claude/CLAUDE.md
+- Security model
+- Unreal Engine workflows
 
 ## God Nodes (most connected - your core abstractions)
 1. `jev-agent-toolkit` - 16 edges
@@ -71,11 +69,11 @@
 ## Import Cycles
 - None detected.
 
-## Communities (28 total, 5 thin omitted)
+## Communities (26 total, 1 thin omitted)
 
 ### Community 0 - "package.json"
 Cohesion: 0.06
-Nodes (33): bin, jev-agent-toolkit-mcp, bugs, url, dependencies, @modelcontextprotocol/server, @typesafe-ai/sdk, zod (+25 more)
+Nodes (32): bin, jev-agent-toolkit-mcp, bugs, url, dependencies, @modelcontextprotocol/server, @typesafe-ai/sdk, zod (+24 more)
 
 ### Community 1 - "SKILL.md"
 Cohesion: 0.08
@@ -86,8 +84,8 @@ Cohesion: 0.08
 Nodes (13): received, SERVER_ENTRY, UPSTREAM_RESPONSE, validChoice, @modelcontextprotocol/client, ALLOWED_KEYS, checks, failures (+5 more)
 
 ### Community 3 - "server.ts"
-Cohesion: 0.13
-Nodes (21): Credential handling, Deliberately absent, Input validation, Logging, MCP bridge trust boundary, Network behaviour, client, TICKET (+13 more)
+Cohesion: 0.16
+Nodes (17): client, TICKET, ErrorCategory, mapError(), MappedError, MIN_REDACTABLE_KEY_LENGTH, redact(), main() (+9 more)
 
 ### Community 4 - "jev-agent-toolkit"
 Cohesion: 0.10
@@ -97,21 +95,21 @@ Nodes (21): A. Portable Agent Skill — start here, B. Optional MCP bridge, Hone
 Cohesion: 0.12
 Nodes (16): compilerOptions, declaration, esModuleInterop, forceConsistentCasingInFileNames, lib, module, moduleResolution, noImplicitOverride (+8 more)
 
-### Community 6 - "Security model"
-Cohesion: 0.13
-Nodes (13): Prompt injection, Reporting, Residual risks, Security model, What the skill forbids, What this repository ships, Environment, Install and run (+5 more)
+### Community 6 - "jev-agent-toolkit-mcp"
+Cohesion: 0.29
+Nodes (7): Environment, Install and run, jev-agent-toolkit-mcp, Layout, Security properties, Tests, The tool
 
 ### Community 7 - "Decision record"
 Cohesion: 0.14
 Nodes (13): Architecture, Decision record, Extending it, Layers, Repository layout, Where the boundaries are, Why exactly one tool, Why one canonical SKILL.md (+5 more)
 
 ### Community 8 - "schemas.ts"
-Cohesion: 0.14
-Nodes (13): choiceAnswer, choiceQuestion, entryType, EvaluateInput, evaluateOutput, MAX_CHOICE_OPTIONS, MAX_SCORE_LEVELS, MIN_SCORE_LEVELS (+5 more)
+Cohesion: 0.15
+Nodes (12): choiceAnswer, choiceQuestion, entryType, MAX_CHOICE_OPTIONS, MAX_SCORE_LEVELS, MIN_SCORE_LEVELS, noulAnswer, noulQuestion (+4 more)
 
 ### Community 9 - "Tool orchestration"
-Cohesion: 0.14
-Nodes (13): Adding new tool domains, Choose the narrowest tool, Discovery, Execute and verify, Reason from capability, never from tool name, Tool orchestration, Using Jev inside tool orchestration, Capability vocabulary (+5 more)
+Cohesion: 0.29
+Nodes (7): Adding new tool domains, Choose the narrowest tool, Discovery, Execute and verify, Reason from capability, never from tool name, Tool orchestration, Using Jev inside tool orchestration
 
 ### Community 10 - "Compatibility"
 Cohesion: 0.18
@@ -165,25 +163,33 @@ Nodes (6): Blender workflows, Capability vocabulary, Ecosystem status (checked 2
 Cohesion: 0.40
 Nodes (5): Claude Code adapter, Install the skill, Notes, Optional MCP bridge, Recommended model mapping
 
+### Community 24 - "Security model"
+Cohesion: 0.17
+Nodes (12): Credential handling, Deliberately absent, Input validation, Logging, MCP bridge trust boundary, Network behaviour, Prompt injection, Reporting (+4 more)
+
+### Community 25 - "Unreal Engine workflows"
+Cohesion: 0.33
+Nodes (6): Capability vocabulary, Ecosystem status (checked 2026-09-19 — re-verify), Safety, Trust boundary, Unreal Engine workflows, Where Jev fits
+
 ## Knowledge Gaps
-- **3 isolated node(s):** `graphify-mcp`, `@types/node`, `typescript`
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 246 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **2 isolated node(s):** `@types/node`, `typescript`
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 238 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `redact()` connect `server.ts` to `Security model`?**
-  _High betweenness centrality (0.310) - this node is a cross-community bridge._
+- **Why does `redact()` connect `server.ts` to `Security model`, `jev-agent-toolkit-mcp`?**
+  _High betweenness centrality (0.330) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `redact()` (e.g. with `Credential handling` and `Deliberately absent`) actually correct?**
   _`redact()` has 3 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `graphify-mcp`, `@types/node`, `typescript` to the rest of the system?**
-  _3 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `@types/node`, `typescript` to the rest of the system?**
+  _2 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `package.json` be split into smaller, more focused modules?**
-  _Cohesion score 0.058823529411764705 - nodes in this community are weakly interconnected._
-- **Why does `Security properties` connect `Security model` to `server.ts`?**
-  _High betweenness centrality (0.253) - this node is a cross-community bridge._
+  _Cohesion score 0.06060606060606061 - nodes in this community are weakly interconnected._
+- **Why does `jev-agent-toolkit-mcp` connect `jev-agent-toolkit-mcp` to `SKILL.md`?**
+  _High betweenness centrality (0.286) - this node is a cross-community bridge._
 - **Should `SKILL.md` be split into smaller, more focused modules?**
-  _Cohesion score 0.08333333333333333 - nodes in this community are weakly interconnected._
-- **Should `validate.mjs` be split into smaller, more focused modules?**
-  _Cohesion score 0.07635467980295567 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07899159663865546 - nodes in this community are weakly interconnected._
+- **Why does `Security properties` connect `jev-agent-toolkit-mcp` to `server.ts`?**
+  _High betweenness centrality (0.268) - this node is a cross-community bridge._
